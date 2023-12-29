@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-server-with-sidecar-deploy
+spec:
+ replicas: 1
+ selector:
+    matchLabels:
+      app: app-server-with-sidecar
+  template:
+    metadata:
+      labels:
+        app: app-server-with-sidecar
+    spec:
+      containers:
+      - name: app-server-with-sidecar
+        image: registry.cloudyuga.guru/library/http-echo:0.2.3
+        args: ["-listen", ":8080", "-text", "using-my-sidecar"]
+        ports:
+          - containerPort: 8080
+      - name: nginx-sidecar
+        image: registry.cloudyuga.guru/library/nginx:alpine
+        ports:
+        - containerPort: 443
+        volumeMounts:
+        - mountPath: /etc/nginx/ssl
+          name: secret-volume
+        - name: nginx-conf-vol
+          mountPath: /etc/nginx/conf.d/default.conf
+          subPath: nginx.conf
+      volumes:
+      - name: nginx-conf-vol
+        configMap:
+          name: nginx-conf
+      - name: secret-volume
+        secret:
+          secretName: http-tls

@@ -1,0 +1,14 @@
+kind: NetworkPolicy
+apiVersion: networking.k8s.io/v1
+metadata:
+  name: ns-allow-prod
+spec:
+  podSelector:
+    matchLabels:
+      app: nginx
+      role: web
+  ingress:
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          ns: prod

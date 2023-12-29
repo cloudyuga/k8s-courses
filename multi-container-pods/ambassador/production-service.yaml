@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: production-app-svc
+  labels:
+    app: production-app
+spec:
+  ports:
+  - port: 80
+    targetPort: 8080
+    name: web
+  selector:
+    app: backend-app
+    version: "0.1"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ambassador-production-deploy
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: backend-app
+      version: "0.1"
+  template:
+    metadata:
+      labels:
+        app: backend-app
+        version: "0.1"
+    spec:
+      containers:
+      - name: app
+        image: teamcloudyuga/http-echo:0.2.3
+        args: ["-listen", ":8080", "-text", "production"]
+        ports:
+          - containerPort: 8080

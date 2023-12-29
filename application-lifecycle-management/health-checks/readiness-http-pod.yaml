@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx-readiness
+spec:
+  containers:
+  - name: nginx-readiness
+    image: teamcloudyuga/nginx:alpine
+    ports:
+    - containerPort: 80
+    readinessProbe:  #very similar syntax to liveness probe, we can check it here
+      httpGet:
+        path: /
+        port: 80
+      initialDelaySeconds: 15
+      periodSeconds: 5
+      timeoutSeconds: 1
+    livenessProbe:
+      httpGet:
+        path: /
+        port: 80
+      initialDelaySeconds: 15
+      periodSeconds: 5
+      timeoutSeconds: 1
