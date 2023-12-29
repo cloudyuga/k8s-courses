@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-ambassador-conf
+data:
+  default.conf: |
+    upstream backend {
+        server production-app-svc;
+    }
+
+    server {
+        listen 4000;
+        server_name _;
+        location / {
+            proxy_pass http://backend;
+        }
+    }

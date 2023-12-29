@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-with-sa
+spec:
+  serviceAccountName: cloudyuga
+  containers:
+  - name: app-server-with-sa
+    image: teamcloudyuga/http-echo:0.2.3
+    args: ["-listen", ":8080", "-text", "pod with servicaccount"]
+    ports:
+      - containerPort: 8080

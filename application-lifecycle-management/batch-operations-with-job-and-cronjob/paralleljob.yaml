@@ -1,0 +1,17 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: nginx-parallel
+spec:
+  completions: 10
+  parallelism: 2
+  template:
+    metadata:
+      name: nginx
+    spec:
+      containers:
+      - name: nginx
+        image: teamcloudyuga/nginx:alpine
+        command: ["/bin/sh"]
+        args: ["-c", "echo Hello World"]
+      restartPolicy: OnFailure

@@ -1,0 +1,17 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: app-server-without-sidecar-deploy
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: app-server-without-sidecar
+    spec:
+      containers:
+      - name: app-server-without-sidecar
+        image: registry.cloudyuga.guru/library/http-echo:0.2.3
+        args: ["-listen", ":8080", "-text", "no-sidecar-for-me"]
+        ports:
+          - containerPort: 8080

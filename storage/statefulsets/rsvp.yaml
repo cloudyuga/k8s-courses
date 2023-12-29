@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: rsvp
+  name: rsvp
+spec:
+  selector:
+    matchLabels:
+      app: rsvp
+  template:
+    metadata:
+      labels:
+        app: rsvp
+    spec:
+      containers:
+      - name: rsvp-app
+        image: teamcloudyuga/rsvpapp
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 5000
+          periodSeconds: 30
+          timeoutSeconds: 1
+          initialDelaySeconds: 50
+        env:
+        - name: MONGODB_HOST
+          value: "mongodb://mongo-2.mongo,mongo-1.mongo,mongo-0.mongo:27017"
+        ports:
+        - containerPort: 5000
+          name: web-port
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: rsvp
+  labels:
+    app: rsvp
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+    nodePort: 31500  
+    targetPort: web-port
+    protocol: TCP
+  selector:
+    app: rsvp

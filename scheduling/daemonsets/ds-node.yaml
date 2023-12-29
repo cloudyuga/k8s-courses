@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: DaemonSet
+metadata:
+  name: nginx-ds-node
+spec: 
+  selector:
+    matchLabels:
+      app: nginx1
+  template:
+    metadata:
+      labels:
+        app: nginx1
+    spec:
+      containers:
+      - name: nginx
+        image: teamcloudyuga/nginx:1.9.1
+        ports:
+        - containerPort: 80
+      nodeSelector:
+        disk: spinning  
