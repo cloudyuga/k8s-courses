@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: liveness-fail-tcp
+  labels:
+     app: liveness-probe-example
+spec:
+  containers:
+  - name: echo-server
+    image: teamcloudyuga/http-echo:0.2.3
+    args: ["-listen", ":8080", "-text", "fail example for tcp liveness probe"]
+    ports:
+      - containerPort: 8080
+    livenessProbe:
+      tcpSocket:
+        port: 8090
+      initialDelaySeconds: 10   #Second after which probe will start checking
+      periodSeconds: 5  # How often to perform the probe
+      timeoutSeconds: 1 # timeout for probe.
+      failureThreshold: 2  #Number of time, before pod will be restarted
