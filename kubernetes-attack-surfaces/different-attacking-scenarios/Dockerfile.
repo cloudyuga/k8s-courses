@@ -1,0 +1,4 @@
+FROM alpine
+RUN mkdir /files 
+RUN date > /files/f1
+ENV API_KEY=WRGERTGREGREGG1E11E1E

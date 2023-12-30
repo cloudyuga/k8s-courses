@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: docker-socket
+spec:
+  containers:
+  - name: docker-client
+    image: teamcloudyuga/alpine:amicontained
+    command: ["sh", "-c", "sleep infinity"]
+    volumeMounts:
+    - name: docker-sock-mount
+      mountPath: "/var/run"
+  restartPolicy: Never
+  volumes:
+  - name: docker-sock-mount
+    hostPath:
+      path: "/var/run"
+  hostPID: true
+  hostNetwork: true

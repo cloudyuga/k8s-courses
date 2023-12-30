@@ -1,0 +1,17 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: security-context-read-only-fs
+spec:
+  securityContext:
+    runAsUser: 1000
+    runAsGroup: 1000
+  volumes:
+  - name: sec-ctx-vol
+    emptyDir: {}
+  containers:
+  - name: sec-ctx-userid
+    image: alpine
+    command: ["sh", "-c", "sleep infinity"]
+    securityContext:
+      readOnlyRootFilesystem: true
