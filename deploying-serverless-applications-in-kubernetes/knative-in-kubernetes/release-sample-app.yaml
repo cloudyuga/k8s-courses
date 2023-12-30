@@ -1,0 +1,19 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: go-app-example
+  namespace: app
+spec:
+  template:
+    metadata:
+      name: go-app-example-first
+    spec:
+      containers:
+        - image: teamcloudyuga/go-statichtml:v1
+          ports:
+          - containerPort: 8080
+          imagePullPolicy: Always
+  traffic:
+  - tag: current
+    latestRevision: true
+    percent: 100

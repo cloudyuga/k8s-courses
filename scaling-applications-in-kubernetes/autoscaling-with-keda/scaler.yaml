@@ -1,0 +1,17 @@
+# scaler.yaml
+apiVersion: keda.sh/v1alpha1
+kind: ScaledObject
+metadata:
+  name: cpu-scaledobject
+  labels:
+    app: rsvp
+spec:
+  maxReplicaCount: 5
+  minReplicaCount: 1
+  scaleTargetRef:
+    name: rsvp
+  triggers:
+  - type: cpu
+    metricType: Utilization # Allowed types are 'Utilization' or 'AverageValue'
+    metadata:
+      value: "20"

@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    test: liveness
+  name: liveness-test-command-fail
+spec:
+  containers:
+  - name: liveness
+    image: teamcloudyuga/busybox:1.28
+    args:
+    - /bin/sh
+    - -c
+    - touch /tmp/healthy; sleep 30; rm -f /tmp/healthy; sleep 1000
+    # ^ Create file and delete after 30sec
+    livenessProbe:
+      exec:
+        command:
+        - cat
+        - /tmp/healthy
+      initialDelaySeconds: 5   # Start initiation of probes after 5 seconds
+      periodSeconds: 3   # check after every 3 second
+      failureThreshold: 3  # Number of times to try before restarting the pod

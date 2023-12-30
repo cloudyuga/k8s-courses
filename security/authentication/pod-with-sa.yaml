@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-with-sa
+  labels:
+     app: nginx
+spec:
+  serviceAccountName: cloudyuga
+  containers:
+  - name: nginx-demo
+    image: teamcloudyuga/nginx:alpine
+    ports:
+    - containerPort: 80
