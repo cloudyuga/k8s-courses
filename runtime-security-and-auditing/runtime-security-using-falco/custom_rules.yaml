@@ -1,0 +1,7 @@
+customRules:
+  falco_rules.local.yaml: |-
+    - rule: read /etc/passwd
+      desc: reading /etc/passwd file
+      condition: fd.name=/etc/passwd
+      output: reading sensitive file (user=%user.name  command=%proc.cmdline file=%fd.name )
+      priority: WARNING

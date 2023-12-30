@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: security-context-remove-cap
+spec:
+  containers:
+  - name: sec-ctx-remove-cap
+    image: nginx:alpine 
+    securityContext:
+      capabilities:
+        drop:
+        - NET_RAW
