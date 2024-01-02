@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: nginx
+  labels:
+     app: nginx
+  annotations:
+    build: demo
+    builder: cloudyuga
+spec:
+  containers:
+  - name: nginx-demo
+    image: nginx:1.9.1
+    ports:
+    - containerPort: 80

@@ -1,0 +1,40 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod
+  labels:
+spec:
+  containers:
+  - name: myc
+    image: nginx:alpine
+    ports:
+    - containerPort: 80
+
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: prod-pod
+  labels:
+    tier: frontend
+    release: prod
+spec:
+  containers:
+  - name: prod-c
+    image: nginx:alpine
+    ports:
+    - containerPort: 80
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: beta-pod
+  labels:
+    tier: frontend
+    release: beta
+spec:
+  containers:
+  - name: beta-c
+    image: nginx:alpine
+    ports:
+    - containerPort: 80

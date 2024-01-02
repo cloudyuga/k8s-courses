@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: multicontainer
+spec:
+  containers:
+  - name: con1
+    image: nginx:alpine
+  - name: con2
+    image: redis
+  - name: con3
+    image: memcached
