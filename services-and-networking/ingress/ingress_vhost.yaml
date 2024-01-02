@@ -1,0 +1,28 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: virtual
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - host: blue.cy.guru
+    http:
+      paths:
+      - pathType: Exact
+        path: "/blue"
+        backend:
+          service:
+             name: blue
+             port:
+               number: 80
+  - host: green.cy.guru
+    http:
+      paths:
+      - pathType: Exact
+        path: "/green"
+        backend:
+          service:
+            name: green
+            port:
+              number: 80

@@ -1,0 +1,16 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cron-job-demo
+spec:
+  schedule: "0 22 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: demo
+            image: teamcloudyuga/nginx:alpine
+            command: ["/bin/sh"]
+            args: ["-c", "echo Time is 10PM"]
+          restartPolicy: OnFailure

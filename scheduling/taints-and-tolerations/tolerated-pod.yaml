@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: mypod
+  labels:
+    app: nginx
+spec:
+  containers:
+  - name: tolerated-nginx
+    image: teamcloudyuga/nginx
+  tolerations:
+  - key: "node-role.kubernetes.io/master"
+    operator: "Exists"
+    value: ""
+    effect: "NoSchedule"
