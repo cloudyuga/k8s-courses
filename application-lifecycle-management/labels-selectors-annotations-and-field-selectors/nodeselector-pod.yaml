@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: pod-demo
+  labels:
+    env: test
+spec:
+  containers:
+  - name: pod-node
+    image: nginx:1.9.1
+  nodeSelector:
+    disktype: ssd
