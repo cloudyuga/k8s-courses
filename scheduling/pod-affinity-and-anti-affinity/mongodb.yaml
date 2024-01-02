@@ -1,0 +1,79 @@
+---
+kind: PersistentVolume
+apiVersion: v1
+metadata:
+  name: pv0001
+  labels:
+    type: local
+spec:
+  capacity:
+    storage: 1Gi
+  accessModes:
+    - ReadWriteOnce
+  hostPath:
+    path: "/tmp/data01"
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: myclaim-1
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 0.5Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rsvp-db
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      appdb: rsvpdb
+  template:
+    metadata:
+      labels:
+        appdb: rsvpdb
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: appdb
+                operator: In
+                values:
+                - rsvpdb
+            topologyKey: "kubernetes.io/hostname"
+      volumes:
+        - name: voldb
+          persistentVolumeClaim:
+           claimName: myclaim-1
+      containers:
+      - name: rsvpd-db
+        image: teamcloudyuga/mongo:3.3
+        volumeMounts:
+        - name: voldb
+          mountPath: /data/db
+        env:
+        - name: MONGODB_DATABASE
+          value: rsvpdata
+        ports:
+        - containerPort: 27017
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mongodb
+  labels:
+    app: rsvpdb
+spec:
+  ports:
+  - port: 27017
+    protocol: TCP
+  selector:
+    appdb: rsvpdb

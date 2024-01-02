@@ -1,0 +1,66 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rsvp
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: rsvp
+  template:
+    metadata:
+      labels:
+        app: rsvp
+    spec:
+      affinity:
+        podAntiAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: app
+                operator: In
+                values:
+                - rsvp
+            topologyKey: "kubernetes.io/hostname"
+        podAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+          - labelSelector:
+              matchExpressions:
+              - key: appdb
+                operator: In
+                values:
+                - rsvpdb
+            topologyKey: "kubernetes.io/hostname"
+      containers:
+      - name: rsvp-app
+        image: teamcloudyuga/rsvpapp
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 5000
+          periodSeconds: 30
+          timeoutSeconds: 1
+          initialDelaySeconds: 50
+        env:
+        - name: MONGODB_HOST
+          value: mongodb
+        ports:
+        - containerPort: 5000
+          name: web-port
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rsvp
+  labels:
+    app: rsvp
+spec:
+  type: NodePort
+  ports:
+  - port: 80
+    targetPort: web-port
+    protocol: TCP
+  selector:
+    app: rsvp
