@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: python-app-service
+  annotations:
+     prometheus.io/scrape: "true"
+  labels:
+    app: python
+spec:
+  ports:
+  - name: web
+    port: 3100
+    targetPort: 3100
+    protocol: TCP
+  selector:
+    app: python

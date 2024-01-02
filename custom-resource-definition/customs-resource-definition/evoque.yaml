@@ -1,0 +1,6 @@
+apiVersion: "crds.cloudyuga.guru/v1"
+kind: Car
+metadata:
+  name: evoque
+spec:
+  brand: landrover
